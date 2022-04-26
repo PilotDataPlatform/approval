@@ -12,24 +12,25 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from app.config import ConfigClass
 import requests
+
+from app.config import ConfigClass
 
 
 class SrvEmail():
-    def send(self, subject, receiver, sender, content="", msg_type="plain", template=None, template_kwargs={}):
+    def send(self, subject, receiver, sender, content='', msg_type='plain', template=None, template_kwargs={}):
         url = ConfigClass.EMAIL_SERVICE
         payload = {
-            "subject": subject,
-            "sender": sender,
-            "receiver": [receiver],
-            "msg_type": msg_type,
+            'subject': subject,
+            'sender': sender,
+            'receiver': [receiver],
+            'msg_type': msg_type,
         }
         if content:
-            payload["message"] = content
+            payload['message'] = content
         if template:
-            payload["template"] = template
-            payload["template_kwargs"] = template_kwargs
+            payload['template'] = template
+            payload['template_kwargs'] = template_kwargs
         res = requests.post(
             url=url,
             json=payload

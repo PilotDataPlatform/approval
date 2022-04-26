@@ -13,17 +13,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import requests
+
 from app.config import ConfigClass
 from app.models.base import EAPIResponseCode
 from app.resources.error_handler import APIException
 
 
 def query_node(label: str, query_data: dict) -> dict:
-    response = requests.post(ConfigClass.NEO4J_SERVICE + f"nodes/{label}/query", json=query_data)
+    response = requests.post(ConfigClass.NEO4J_SERVICE + f'nodes/{label}/query', json=query_data)
     if response.status_code != 200:
-        error_msg = f"Error calling Neo4j service: {response.json()}"
+        error_msg = f'Error calling Neo4j service: {response.json()}'
         raise APIException(error_msg=error_msg, status_code=EAPIResponseCode.internal_error.value)
     if not response.json():
-        error_msg = f"{label} not found: {query_data}"
+        error_msg = f'{label} not found: {query_data}'
         raise APIException(error_msg=error_msg, status_code=EAPIResponseCode.not_found.value)
     return response.json()[0]

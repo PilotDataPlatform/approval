@@ -14,13 +14,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os
 from functools import lru_cache
-from typing import Any
-from typing import Dict
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from common import VaultClient
-from pydantic import BaseSettings
-from pydantic import Extra
+from pydantic import BaseSettings, Extra
 
 
 class VaultConfig(BaseSettings):
@@ -50,10 +47,10 @@ def load_vault_settings(settings: BaseSettings) -> Dict[str, Any]:
 
 class Settings(BaseSettings):
     env: str = os.environ.get('env')
-    version: str = "0.1.0"
+    version: str = '0.1.0'
 
     port: int = 8000
-    host: str = "0.0.0.0"
+    host: str = '0.0.0.0'
 
     AUTH_SERVICE: str
     NEO4J_SERVICE: str
@@ -64,7 +61,7 @@ class Settings(BaseSettings):
     RDS_SCHEMA_DEFAULT: str
     RDS_DB_URI: str
 
-    EMAIL_SUPPORT: str = "jzhang@indocresearch.org"
+    EMAIL_SUPPORT: str = 'jzhang@indocresearch.org'
 
     CORE_ZONE_LABEL: str
     GREEN_ZONE_LABEL: str
@@ -72,13 +69,13 @@ class Settings(BaseSettings):
     def __init__(self, *args: Any, **kwds: Any) -> None:
         super().__init__(*args, **kwds)
 
-        self.AUTH_SERVICE = self.AUTH_SERVICE + "/v1/"
+        self.AUTH_SERVICE = self.AUTH_SERVICE + '/v1/'
         NEO4J_HOST = self.NEO4J_SERVICE
-        self.NEO4J_SERVICE = NEO4J_HOST + "/v1/neo4j/"
-        self.NEO4J_SERVICE_V2 = NEO4J_HOST + "/v2/neo4j/"
-        self.DATA_UTILITY_SERVICE = self.DATA_OPS_UTIL + "/v1/"
-        self.EMAIL_SERVICE = self.EMAIL_SERVICE + "/v1/email"
-        self.META_SERVICE = self.META_SERVICE + "/v1/"
+        self.NEO4J_SERVICE = NEO4J_HOST + '/v1/neo4j/'
+        self.NEO4J_SERVICE_V2 = NEO4J_HOST + '/v2/neo4j/'
+        self.DATA_UTILITY_SERVICE = self.DATA_OPS_UTIL + '/v1/'
+        self.EMAIL_SERVICE = self.EMAIL_SERVICE + '/v1/email'
+        self.META_SERVICE = self.META_SERVICE + '/v1/'
 
     class Config:
         env_file = '.env'

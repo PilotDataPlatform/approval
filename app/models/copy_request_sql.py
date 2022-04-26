@@ -12,19 +12,21 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from sqlalchemy import Column, String, DateTime, ForeignKey, BigInteger
-from sqlalchemy.dialects.postgresql import UUID
-from app.config import ConfigClass
-from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 from uuid import uuid4
+
+from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, String
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.declarative import declarative_base
+
+from app.config import ConfigClass
 
 Base = declarative_base()
 
 
 class RequestModel(Base):
-    __tablename__ = "approval_request"
-    __table_args__ = {"schema": ConfigClass.RDS_SCHEMA_DEFAULT}
+    __tablename__ = 'approval_request'
+    __table_args__ = {'schema': ConfigClass.RDS_SCHEMA_DEFAULT}
     id = Column(UUID(as_uuid=True), unique=True, primary_key=True, default=uuid4)
     status = Column(String())
     submitted_by = Column(String())
@@ -42,12 +44,12 @@ class RequestModel(Base):
     def to_dict(self):
         result = {}
         for field in self.__table__.columns.keys():
-            if field in ["submitted_at", "completed_at"]:
+            if field in ['submitted_at', 'completed_at']:
                 if getattr(self, field):
                     result[field] = str(getattr(self, field).isoformat()[:-3] + 'Z')
                 else:
                     result[field] = None
-            elif field in ["id", "destination_id", "source_id"]:
+            elif field in ['id', 'destination_id', 'source_id']:
                 result[field] = str(getattr(self, field))
             else:
                 result[field] = getattr(self, field)
@@ -55,8 +57,8 @@ class RequestModel(Base):
 
 
 class EntityModel(Base):
-    __tablename__ = "approval_entity"
-    __table_args__ = {"schema": ConfigClass.RDS_SCHEMA_DEFAULT}
+    __tablename__ = 'approval_entity'
+    __table_args__ = {'schema': ConfigClass.RDS_SCHEMA_DEFAULT}
     id = Column(UUID(as_uuid=True), unique=True, primary_key=True, default=uuid4)
     request_id = Column(UUID(as_uuid=True), ForeignKey(RequestModel.id))
     entity_id = Column(UUID(as_uuid=True))
@@ -75,9 +77,9 @@ class EntityModel(Base):
     def to_dict(self):
         result = {}
         for field in self.__table__.columns.keys():
-            if field == "uploaded_at":
+            if field == 'uploaded_at':
                 result[field] = str(getattr(self, field).isoformat()[:-3] + 'Z')
-            elif field in ["id", "request_id", "entity_id", "parent_id"]:
+            elif field in ['id', 'request_id', 'entity_id', 'parent_id']:
                 result[field] = str(getattr(self, field))
             else:
                 result[field] = getattr(self, field)
