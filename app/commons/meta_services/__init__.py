@@ -42,11 +42,13 @@ def bulk_get_by_ids(ids: List[str]) -> List[dict]:
 
 
 def get_files_recursive(entity: dict) -> list:
+    parent_path = entity['parent_path']
+    name = entity['name']
     query_data = {
         'container_code': entity['container_code'],
         'zone': entity['zone'],
         'recursive': True,
-        'parent_path': entity['parent_path'] + '.' + entity['name']
+        'parent_path': f'{parent_path}.{name}'
     }
     response = httpx.get(ConfigClass.META_SERVICE + 'items/search', params=query_data)
     if response.status_code != 200:
