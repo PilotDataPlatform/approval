@@ -17,7 +17,8 @@ from app.config import ConfigClass
 
 router = APIRouter()
 
-## root api, for debuging
+
+# root api, for debuging
 @router.get("/")
 async def root():
     '''

@@ -12,9 +12,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from fastapi_sqlalchemy import db
-from sqlalchemy import Column, String, Date, DateTime, Integer, Boolean, ForeignKey, BigInteger
-from sqlalchemy.sql.schema import UniqueConstraint
+from sqlalchemy import Column, String, DateTime, ForeignKey, BigInteger
 from sqlalchemy.dialects.postgresql import UUID
 from app.config import ConfigClass
 from sqlalchemy.ext.declarative import declarative_base
@@ -22,6 +20,7 @@ from datetime import datetime
 from uuid import uuid4
 
 Base = declarative_base()
+
 
 class RequestModel(Base):
     __tablename__ = "approval_request"
@@ -83,4 +82,3 @@ class EntityModel(Base):
             else:
                 result[field] = getattr(self, field)
         return result
-

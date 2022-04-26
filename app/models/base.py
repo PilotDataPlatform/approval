@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from enum import Enum
-from pydantic import BaseModel, validator, Field, root_validator
+from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 
 
@@ -46,4 +46,3 @@ class PaginationRequest(BaseModel):
     page_size: int = 25
     order_type: str = "asc"
     order_by: str = "uploaded_at"
-

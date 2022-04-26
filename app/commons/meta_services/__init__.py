@@ -26,7 +26,7 @@ def get_node_by_id(entity_id: str) -> dict:
         error_msg = f"Error calling Meta service get_node_by_id: {response.json()}"
         raise APIException(error_msg=error_msg, status_code=EAPIResponseCode.internal_error.value)
     if not response.json()["result"]:
-        error_msg = f"Folder not found"
+        error_msg = "Folder not found"
         raise APIException(error_msg=error_msg, status_code=EAPIResponseCode.not_found.value)
     return response.json()["result"]
 

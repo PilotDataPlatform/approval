@@ -77,9 +77,8 @@ class GETRequestFiles(PaginationRequest):
     def valid_json(cls, value):
         try:
             value = json.loads(value)
-        except Exception as e:
-            error_msg = f"query or partial json is not valid"
-            raise APIException(EAPIResponseCode.bad_request.value, f"Invalid json: {value}")
+        except Exception:
+            raise APIException(EAPIResponseCode.bad_request.value, "Invalid json: {value}")
         return value
 
 

@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from fastapi_sqlalchemy import db
-from app.models.copy_request_sql import EntityModel, RequestModel
+from app.models.copy_request_sql import EntityModel
 from datetime import datetime
 
 
@@ -45,7 +45,7 @@ def get_all_sub_files(request_id: str, entity_ids: list[str]) -> list[str]:
     return file_ids
 
 
-def get_sql_file_nodes_recursive(request_id: str, folder_id: str, review_status: str, files: list=None) -> list[EntityModel]:
+def get_sql_file_nodes_recursive(request_id: str, folder_id: str, review_status: str, files: list = None) -> list[EntityModel]:
     if not files:
         files = []
 

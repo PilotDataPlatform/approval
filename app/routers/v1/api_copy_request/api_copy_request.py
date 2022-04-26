@@ -123,7 +123,6 @@ class APICopyRequest:
             query_params["parent_id"] = None
 
         sql_query = db.session.query(EntityModel)
-        for item in sql_query.all():
         for key, value in params.query.items():
             if key in params.partial:
                 sql_query = sql_query.filter(getattr(EntityModel, key).contains(value))
@@ -290,8 +289,6 @@ class APICopyRequest:
         logger.info("Get Pending called")
         api_response = APIResponse()
 
-        request_obj = db.session.query(RequestModel).get(params.request_id)
-
         query_params = {
             "request_id": params.request_id,
             "review_status": "pending",
@@ -324,4 +321,3 @@ class APICopyRequest:
         db.session.commit()
         api_response.result = "success"
         return api_response.json_response()
-

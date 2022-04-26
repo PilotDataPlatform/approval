@@ -19,7 +19,7 @@ from .config import ConfigClass
 from .api_registry import api_registry
 from app.resources.error_handler import APIException
 from fastapi_sqlalchemy import DBSessionMiddleware
-import os
+
 
 def create_app():
     '''

@@ -28,6 +28,7 @@ def get_user(username: str) -> dict:
         raise Exception(f"Error getting user {username} from auth service: " + str(response.json()))
     return response.json()["result"]
 
+
 def notify_project_admins(username: str, project_code: str, request_timestamp: str):
     user_node = get_user(username)
 
@@ -56,6 +57,7 @@ def notify_project_admins(username: str, project_code: str, request_timestamp: s
                 "request_timestamp": request_timestamp,
             },
         )
+
 
 def notify_user(username: str, admin_username: str, project_code: str, request_timestamp: str, complete_timestamp: str):
     user_node = get_user(username)

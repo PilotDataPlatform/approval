@@ -14,7 +14,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from app.config import ConfigClass
 import requests
-import json
 
 
 class SrvEmail():
