@@ -22,7 +22,6 @@ from app.resources.error_handler import APIException
 
 
 def get_node_by_id(entity_id: str) -> dict:
-    print(entity_id)
     response = httpx.get(ConfigClass.META_SERVICE + f'item/{entity_id}')
     if response.status_code != 200:
         error_msg = f'Error calling Meta service get_node_by_id: {response.json()}'
