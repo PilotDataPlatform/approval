@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     NEO4J_SERVICE: str
     DATA_OPS_UTIL: str
     EMAIL_SERVICE: str
+    META_SERVICE: str
 
     RDS_SCHEMA_DEFAULT: str
     RDS_DB_URI: str
@@ -77,6 +78,7 @@ class Settings(BaseSettings):
         self.NEO4J_SERVICE_V2 = NEO4J_HOST + "/v2/neo4j/"
         self.DATA_UTILITY_SERVICE = self.DATA_OPS_UTIL + "/v1/"
         self.EMAIL_SERVICE = self.EMAIL_SERVICE + "/v1/email"
+        self.META_SERVICE = self.META_SERVICE + "/v1/"
 
     class Config:
         env_file = '.env'

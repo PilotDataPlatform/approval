@@ -18,30 +18,33 @@ from common import LoggerFactory
 from app.config import ConfigClass
 from app.models.base import EAPIResponseCode
 from app.resources.error_handler import APIException
+from app.commons.neo4j_services import query_node
 
 logger = LoggerFactory('api_copy_request').get_logger()
 
 
 def trigger_copy_pipeline(
     request_id: str,
-    project_geid: str,
-    source_geid: str,
-    destination_geid: str,
-    entity_geids: list[str],
+    project_code: str,
+    source_id: str,
+    destination_id: str,
+    entity_ids: list[str],
     username: str,
     session_id: str,
     auth: dict,
 ) -> dict:
+
+    project_node = query_node("Container", {"code": project_code})
     copy_data = {
         'payload': {
-            'targets': [{'geid': i} for i in entity_geids],
-            'destination': destination_geid,
-            'source': source_geid,
+            'targets': [{'geid': str(i)} for i in entity_ids],
+            'destination': str(destination_id),
+            'source': str(source_id),
             'request_id': request_id,
         },
         'operator': username,
         'operation': 'copy',
-        'project_geid': project_geid,
+        'project_geid': project_node["global_entity_id"],
         'session_id': session_id,
     }
     response = requests.post(ConfigClass.DATA_UTILITY_SERVICE + 'files/actions', json=copy_data, headers=auth)

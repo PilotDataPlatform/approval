@@ -26,9 +26,9 @@ from .base import PaginationRequest
 
 
 class POSTRequest(BaseModel):
-    entity_geids: list[str]
-    destination_geid: str
-    source_geid: str
+    entity_ids: list[str]
+    destination_id: str
+    source_id: str
     note: str
     submitted_by: str
 
@@ -68,7 +68,7 @@ class GETRequestResponse(APIResponse):
 
 class GETRequestFiles(PaginationRequest):
     request_id: uuid.UUID
-    parent_geid: str = ""
+    parent_id: str = ""
     query: str = "{}"
     partial: str = "[]"
     order_by: str = "uploaded_at"
@@ -121,7 +121,7 @@ class PUTRequestFiles(BaseModel):
 
 
 class PATCHRequestFiles(BaseModel):
-    entity_geids: list[str]
+    entity_ids: list[str]
     request_id: uuid.UUID
     review_status: str
     username: str

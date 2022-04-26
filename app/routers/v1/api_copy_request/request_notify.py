@@ -28,11 +28,10 @@ def get_user(username: str) -> dict:
         raise Exception(f"Error getting user {username} from auth service: " + str(response.json()))
     return response.json()["result"]
 
-def notify_project_admins(username: str, project_geid: str, request_timestamp: str):
+def notify_project_admins(username: str, project_code: str, request_timestamp: str):
     user_node = get_user(username)
 
-    project_node = query_node("Container", {"global_entity_id": project_geid})
-    project_code = project_node["code"]
+    project_node = query_node("Container", {"code": project_code})
 
     payload = {
         "role_names": [f"{project_code}-admin"],
@@ -58,10 +57,10 @@ def notify_project_admins(username: str, project_geid: str, request_timestamp: s
             },
         )
 
-def notify_user(username: str, admin_username: str, project_geid: str, request_timestamp: str, complete_timestamp: str):
+def notify_user(username: str, admin_username: str, project_code: str, request_timestamp: str, complete_timestamp: str):
     user_node = get_user(username)
     admin_node = get_user(admin_username)
-    project_node = query_node("Container", {"global_entity_id": project_geid})
+    project_node = query_node("Container", {"code": project_code})
     email_service = SrvEmail()
     email_service.send(
         "Your request to copy data to Core is Completed",

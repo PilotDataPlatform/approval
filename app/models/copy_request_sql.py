@@ -30,10 +30,10 @@ class RequestModel(Base):
     status = Column(String())
     submitted_by = Column(String())
     submitted_at = Column(DateTime(), default=datetime.utcnow)
-    destination_geid = Column(String())
-    source_geid = Column(String())
+    destination_id = Column(UUID(as_uuid=True))
+    source_id = Column(UUID(as_uuid=True))
     note = Column(String())
-    project_geid = Column(String())
+    project_code = Column(String())
     destination_path = Column(String())
     source_path = Column(String())
     review_notes = Column(String())
@@ -48,7 +48,7 @@ class RequestModel(Base):
                     result[field] = str(getattr(self, field).isoformat()[:-3] + 'Z')
                 else:
                     result[field] = None
-            elif field == "id":
+            elif field in ["id", "destination_id", "source_id"]:
                 result[field] = str(getattr(self, field))
             else:
                 result[field] = getattr(self, field)
@@ -60,12 +60,12 @@ class EntityModel(Base):
     __table_args__ = {"schema": ConfigClass.RDS_SCHEMA_DEFAULT}
     id = Column(UUID(as_uuid=True), unique=True, primary_key=True, default=uuid4)
     request_id = Column(UUID(as_uuid=True), ForeignKey(RequestModel.id))
-    entity_geid = Column(String())
+    entity_id = Column(UUID(as_uuid=True))
     entity_type = Column(String())
     review_status = Column(String())
     reviewed_by = Column(String())
     reviewed_at = Column(String())
-    parent_geid = Column(String())
+    parent_id = Column(UUID(as_uuid=True))
     copy_status = Column(String())
     name = Column(String())
     uploaded_by = Column(String(), nullable=True)
@@ -78,7 +78,7 @@ class EntityModel(Base):
         for field in self.__table__.columns.keys():
             if field == "uploaded_at":
                 result[field] = str(getattr(self, field).isoformat()[:-3] + 'Z')
-            elif field in ["id", "request_id"]:
+            elif field in ["id", "request_id", "entity_id", "parent_id"]:
                 result[field] = str(getattr(self, field))
             else:
                 result[field] = getattr(self, field)

@@ -24,27 +24,40 @@ from testcontainers.postgres import PostgresContainer
 from app.config import ConfigClass
 from app.main import create_app
 from app.models.copy_request_sql import Base, EntityModel, RequestModel
+from uuid import uuid4
+
+DEST_FOLDER_ID = str(uuid4())
+SRC_FOLDER_ID = str(uuid4())
 
 FILE_DATA = {
-    "global_entity_id": "approval_test_geid1",
+    "id": str(uuid4()),
     "labels": ["File", "Greenroom"],
     "display_path": "test/",
     "name": "test_file",
-    "time_created": "2021-06-09T13:44:12.381872077",
-    "uploader": "admin",
-    "file_size": 123,
-    "parent_folder_geid": "approval_test_geid2",
+    "created_time": "2021-06-09T13:44:12.381872077",
+    "owner": "admin",
+    "size": 123,
     "archived": False,
+    "parent_path": "fake.path",
+    "container_code": "testproject",
+    "zone": "Greenroom",
+    "type": "file",
+    "parent": None,
 }
 
 FOLDER_DATA = {
-    "global_entity_id": "approval_test_geid2",
+    "id": str(uuid4()),
     "labels": ["Folder", "Greenroom"],
     "display_path": "test/",
     "name": "test_folder",
-    "time_created": "2021-06-09T13:44:12.381872077",
-    "uploader": "admin",
+    "created_time": "2021-06-09T13:44:12.381872077",
+    "owner": "admin",
     "archived": False,
+    "parent_path": "fake.path",
+    "container_code": "testproject",
+    "zone": "Greenroom",
+    "type": "folder",
+    "parent": None,
 }
 
 USER_DATA = {
@@ -66,6 +79,7 @@ def requests_mocker(request):
 def mock_project(requests_mocker):
     # mock get project
     mock_data = [{
+        "global_entity_id": "testproject",
         "code": "testing",
         "name": "Testing",
     }]
@@ -91,17 +105,34 @@ def mock_roles(requests_mocker):
 
 
 @pytest.fixture
-def mock_src_dest_folder(requests_mocker):
-    get_by_geid_url = ConfigClass.NEO4J_SERVICE + "nodes/geid/"
+def mock_src(httpx_mock):
+    get_by_geid_url = ConfigClass.META_SERVICE + "item"
     mock_folder = FOLDER_DATA.copy()
-    mock_folder["global_entity_id"] = "src_folder_geid"
-    mock_data = [mock_folder]
-    requests_mocker.get(get_by_geid_url + "src_folder_geid", json=mock_data)
+    mock_folder["id"] = str(SRC_FOLDER_ID)
+    mock_folder["name"] = "src_folder"
+    mock_data = {"result": mock_folder}
+    httpx_mock.add_response(
+        method="GET",
+        url=get_by_geid_url + "/" + str(SRC_FOLDER_ID),
+        json=mock_data,
+        status_code=200
+    )
 
+
+@pytest.fixture
+def mock_dest(httpx_mock):
+    get_by_geid_url = ConfigClass.META_SERVICE + "item"
     mock_folder = FOLDER_DATA.copy()
-    mock_folder["global_entity_id"] = "dest_folder_geid"
-    mock_data = [mock_folder]
-    requests_mocker.get(get_by_geid_url + "dest_folder_geid", json=mock_data)
+    mock_folder["id"] = str(DEST_FOLDER_ID)
+    mock_folder["name"] = "dest_folder"
+    mock_data = {"result": mock_folder}
+    httpx_mock.add_response(
+        method="GET",
+        url=get_by_geid_url + "/" + str(DEST_FOLDER_ID),
+        json=mock_data,
+        status_code=200
+    )
+
 
 @pytest.fixture(scope='session', autouse=True)
 def db():
