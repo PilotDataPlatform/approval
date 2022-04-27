@@ -13,10 +13,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import uvicorn
-from app.main import create_app
+
 from app.config import ConfigClass
+from app.main import create_app
 
 app = create_app()
 
-if __name__ == "__main__":
-    uvicorn.run("run:app", host=ConfigClass.host, port=ConfigClass.port, log_level="info", reload=True)
+if __name__ == '__main__':
+    uvicorn.run('run:app', host=ConfigClass.host, port=ConfigClass.port, log_level='info', reload=True)

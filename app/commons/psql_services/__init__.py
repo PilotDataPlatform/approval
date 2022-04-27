@@ -12,73 +12,80 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from fastapi_sqlalchemy import db
-from app.models.copy_request_sql import EntityModel, RequestModel
 from datetime import datetime
 
+from fastapi_sqlalchemy import db
 
-def get_sql_files_recursive(request_id: str, folder_geid: str, file_geids: list[str] = None) -> list[EntityModel]:
-    if not file_geids:
-        file_geids = []
+from app.models.copy_request_sql import EntityModel
 
-    entities = db.session.query(EntityModel).filter_by(request_id=request_id, parent_geid=folder_geid)
+
+def get_sql_files_recursive(request_id: str, folder_id: str, file_ids: list[str] = None) -> list[EntityModel]:
+    if not file_ids:
+        file_ids = []
+
+    entities = db.session.query(EntityModel).filter_by(request_id=request_id, parent_id=folder_id)
     for entity in entities:
-        if entity.entity_type == "file":
-            if entity.review_status == "pending":
-                file_geids.append(entity.entity_geid)
+        if entity.entity_type == 'file':
+            if entity.review_status == 'pending':
+                file_ids.append(entity.entity_id)
         else:
-            file_geids = get_sql_files_recursive(request_id, entity.entity_geid, file_geids=file_geids)
-    return file_geids
+            file_ids = get_sql_files_recursive(request_id, entity.entity_id, file_ids=file_ids)
+    return file_ids
 
 
-def get_all_sub_files(request_id: str, entity_geids: list[str]) -> list[str]:
+def get_all_sub_files(request_id: str, entity_ids: list[str]) -> list[str]:
     entities = db.session.query(EntityModel).filter_by(request_id=request_id).filter(
-        EntityModel.entity_geid.in_(entity_geids)
+        EntityModel.entity_id.in_(entity_ids)
     )
-    file_geids = []
+    file_ids = []
     for entity in entities:
-        if entity.entity_type == "file":
-            file_geids.append(entity.entity_geid)
+        if entity.entity_type == 'file':
+            file_ids.append(entity.entity_id)
         else:
             # Get all files in subfolder
-            file_geids = get_sql_files_recursive(request_id, entity.entity_geid, file_geids=file_geids)
-    return file_geids
+            file_ids = get_sql_files_recursive(request_id, entity.entity_id, file_ids=file_ids)
+    return file_ids
 
 
-def get_sql_file_nodes_recursive(request_id: str, folder_geid: str, review_status: str, files: list=None) -> list[EntityModel]:
+def get_sql_file_nodes_recursive(
+    request_id: str,
+    folder_id: str,
+    review_status: str,
+    files: list = None
+) -> list[EntityModel]:
     if not files:
         files = []
 
-    entities = db.session.query(EntityModel).filter_by(request_id=request_id, parent_geid=folder_geid)
+    entities = db.session.query(EntityModel).filter_by(request_id=request_id, parent_id=folder_id)
     for entity in entities:
-        if entity.entity_type == "file":
+        if entity.entity_type == 'file':
             if entity.review_status == review_status:
-                files.append(entity.entity_geid)
+                files.append(entity.entity_id)
         else:
-            files = get_sql_file_nodes_recursive(request_id, entity.entity_geid, review_status, files=files)
+            files = get_sql_file_nodes_recursive(request_id, entity.entity_id, review_status, files=files)
     return files
 
 
-def get_all_sub_folder_nodes(request_id: str, entity_geids: list[str], review_status: str) -> list[str]:
+def get_all_sub_folder_nodes(request_id: str, entity_ids: list[str], review_status: str) -> list[str]:
     entities = db.session.query(EntityModel).filter_by(request_id=request_id).filter(
-        EntityModel.entity_geid.in_(entity_geids)
+        EntityModel.entity_id.in_(entity_ids)
     )
     files = []
     for entity in entities:
-        if entity.entity_type == "folder":
+        if entity.entity_type == 'folder':
             # Get all files in subfolder
-            files = get_sql_file_nodes_recursive(request_id, entity.entity_geid, review_status, files=files)
+            files = get_sql_file_nodes_recursive(request_id, entity.entity_id, review_status, files=files)
     return files
 
 
-def update_files_sql(request_id: str, review_status: str, username: str, file_geids: list[str]) -> int:
+def update_files_sql(request_id: str, review_status: str, username: str, file_ids: list[str]) -> int:
     review_data = {
-        "review_status": review_status,
-        "reviewed_by": username,
-        "reviewed_at": datetime.utcnow(),
+        'review_status': review_status,
+        'reviewed_by': username,
+        'reviewed_at': datetime.utcnow(),
     }
     files = db.session.query(EntityModel).filter_by(request_id=request_id).filter(
-        EntityModel.entity_geid.in_(file_geids)
+        EntityModel.entity_id.in_(file_ids)
     )
     files.update(review_data)
     db.session.commit()
@@ -86,26 +93,22 @@ def update_files_sql(request_id: str, review_status: str, username: str, file_ge
 
 
 def create_entity_from_node(request_id: str, entity: dict) -> EntityModel:
-    # Create entity in psql given neo4j node
-    if "File" in entity["labels"]:
-        entity_type = "file"
-    else:
-        entity_type = "folder"
+    # Create entity in psql given meta
 
     entity_data = {
-        "request_id": request_id,
-        "entity_geid": entity["global_entity_id"],
-        "entity_type": entity_type,
-        "parent_geid": entity["parent_folder_geid"],
-        "name": entity["name"],
-        "uploaded_by": entity["uploader"],
-        "uploaded_at": entity["time_created"],
-        "dcm_id": entity.get("dcm_id"),
+        'request_id': request_id,
+        'entity_id': entity['id'],
+        'entity_type': entity['type'],
+        'parent_id': entity['parent'],
+        'name': entity['name'],
+        'uploaded_by': entity['owner'],
+        'uploaded_at': entity['created_time'],
+        'dcm_id': entity.get('dcm_id'),
     }
-    if entity_type == "file":
-        entity_data["review_status"] = "pending"
-        entity_data["file_size"] = entity["file_size"]
-        entity_data["copy_status"] = "pending"
+    if entity['type'] == 'file':
+        entity_data['review_status'] = 'pending'
+        entity_data['file_size'] = entity['size']
+        entity_data['copy_status'] = 'pending'
     entity_obj = EntityModel(**entity_data)
     db.session.add(entity_obj)
     db.session.commit()

@@ -13,14 +13,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from fastapi import APIRouter
+
 from app.config import ConfigClass
 
 router = APIRouter()
 
-## root api, for debuging
-@router.get("/")
+
+# root api, for debuging
+@router.get('/')
 async def root():
-    '''
-    For testing if service's up
-    '''
-    return {"message": "Service Approval On, Version: " + ConfigClass.version}
+    """For testing if service's up."""
+    return {'message': 'Service Approval On, Version: ' + ConfigClass.version}

@@ -15,27 +15,24 @@
 import json
 import uuid
 
-from pydantic import BaseModel
-from pydantic import Field
-from pydantic import validator
+from pydantic import BaseModel, Field, validator
 
 from app.resources.error_handler import APIException
-from .base import APIResponse
-from .base import EAPIResponseCode
-from .base import PaginationRequest
+
+from .base import APIResponse, EAPIResponseCode, PaginationRequest
 
 
 class POSTRequest(BaseModel):
-    entity_geids: list[str]
-    destination_geid: str
-    source_geid: str
+    entity_ids: list[str]
+    destination_id: str
+    source_id: str
     note: str
     submitted_by: str
 
     @validator('note')
     def valid_note(cls, value):
-        if value == "":
-            raise APIException(EAPIResponseCode.bad_request.value, "Note is required")
+        if value == '':
+            raise APIException(EAPIResponseCode.bad_request.value, 'Note is required')
         return value
 
 
@@ -45,7 +42,7 @@ class POSTRequestResponse(APIResponse):
         'error_msg': '',
         'num_of_pages': 1,
         'page': 0,
-        'result': "success",
+        'result': 'success',
         'total': 1
     })
 
@@ -68,18 +65,17 @@ class GETRequestResponse(APIResponse):
 
 class GETRequestFiles(PaginationRequest):
     request_id: uuid.UUID
-    parent_geid: str = ""
-    query: str = "{}"
-    partial: str = "[]"
-    order_by: str = "uploaded_at"
+    parent_id: str = ''
+    query: str = '{}'
+    partial: str = '[]'
+    order_by: str = 'uploaded_at'
 
     @validator('query', 'partial')
     def valid_json(cls, value):
         try:
             value = json.loads(value)
-        except Exception as e:
-            error_msg = f"query or partial json is not valid"
-            raise APIException(EAPIResponseCode.bad_request.value, f"Invalid json: {value}")
+        except Exception:
+            raise APIException(EAPIResponseCode.bad_request.value, 'Invalid json: {value}')
         return value
 
 
@@ -97,13 +93,13 @@ class GETRequestFilesResponse(APIResponse):
 class PUTRequest(BaseModel):
     request_id: uuid.UUID
     status: str
-    review_notes: str = ""
+    review_notes: str = ''
     username: str
 
     @validator('status')
     def valid_status(cls, value):
-        if value != "complete":
-            raise APIException(EAPIResponseCode.bad_request.value, "invalid review status")
+        if value != 'complete':
+            raise APIException(EAPIResponseCode.bad_request.value, 'invalid review status')
         return value
 
 
@@ -115,13 +111,13 @@ class PUTRequestFiles(BaseModel):
 
     @validator('review_status')
     def valid_review_status(cls, value):
-        if value not in ["approved", "denied"]:
-            raise APIException(EAPIResponseCode.bad_request.value, "invalid review status")
+        if value not in ['approved', 'denied']:
+            raise APIException(EAPIResponseCode.bad_request.value, 'invalid review status')
         return value
 
 
 class PATCHRequestFiles(BaseModel):
-    entity_geids: list[str]
+    entity_ids: list[str]
     request_id: uuid.UUID
     review_status: str
     username: str
@@ -129,8 +125,8 @@ class PATCHRequestFiles(BaseModel):
 
     @validator('review_status')
     def valid_review_status(cls, value):
-        if value not in ["approved", "denied"]:
-            raise APIException(EAPIResponseCode.bad_request.value, "invalid review status")
+        if value not in ['approved', 'denied']:
+            raise APIException(EAPIResponseCode.bad_request.value, 'invalid review status')
         return value
 
 
@@ -156,8 +152,8 @@ class GETPendingResponse(APIResponse):
         'num_of_pages': 1,
         'page': 0,
         'result': {
-            "pending_count": 1,
-            "pending_entities": ["geid"],
+            'pending_count': 1,
+            'pending_entities': ['geid'],
         },
         'total': 1
     })

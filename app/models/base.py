@@ -13,8 +13,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from enum import Enum
-from pydantic import BaseModel, validator, Field, root_validator
+
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 
 
 class EAPIResponseCode(Enum):
@@ -29,7 +30,7 @@ class EAPIResponseCode(Enum):
 
 class APIResponse(BaseModel):
     code: EAPIResponseCode = EAPIResponseCode.success
-    error_msg: str = ""
+    error_msg: str = ''
     page: int = 0
     total: int = 1
     num_of_pages: int = 1
@@ -37,13 +38,12 @@ class APIResponse(BaseModel):
 
     def json_response(self):
         data = self.dict()
-        data["code"] = self.code.value
+        data['code'] = self.code.value
         return JSONResponse(status_code=self.code.value, content=data)
 
 
 class PaginationRequest(BaseModel):
     page: int = 0
     page_size: int = 25
-    order_type: str = "asc"
-    order_by: str = "uploaded_at"
-
+    order_type: str = 'asc'
+    order_by: str = 'uploaded_at'
