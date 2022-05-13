@@ -35,8 +35,6 @@ def get_node_by_id(entity_id: str) -> dict:
 def bulk_get_by_ids(ids: List[str]) -> List[dict]:
     query_data = {'ids': ids}
     response = httpx.get(ConfigClass.META_SERVICE + 'items/batch/', params=query_data)
-    print(response)
-    print(response.text)
     if response.status_code != 200:
         error_msg = f'Error calling Meta service bulk_get_by_ids: {response.json()}'
         raise APIException(error_msg=error_msg, status_code=EAPIResponseCode.internal_error.value)
