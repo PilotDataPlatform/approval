@@ -26,6 +26,7 @@ pytest-httpx = "0.20.0"
 mock = "4.0.3"
 sqlalchemy-utils = "0.38.2"
 testcontainers = "3.4.2"
+alembic = "1.7.7"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
