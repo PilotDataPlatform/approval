@@ -115,7 +115,7 @@ def mock_src(httpx_mock):
     mock_data = {'result': mock_folder}
     httpx_mock.add_response(
         method='GET',
-        url=get_by_geid_url + '/' + str(SRC_FOLDER_ID),
+        url=get_by_geid_url + '/' + str(SRC_FOLDER_ID) + '/',
         json=mock_data,
         status_code=200
     )
@@ -130,7 +130,7 @@ def mock_dest(httpx_mock):
     mock_data = {'result': mock_folder}
     httpx_mock.add_response(
         method='GET',
-        url=get_by_geid_url + '/' + str(DEST_FOLDER_ID),
+        url=get_by_geid_url + '/' + str(DEST_FOLDER_ID) + '/',
         json=mock_data,
         status_code=200
     )
