@@ -73,6 +73,14 @@ class APICopyRequest:
 
         dest_folder_node = get_node_by_id(data.destination_id)
         source_folder_node = get_node_by_id(data.source_id)
+        if dest_folder_node["parent_path"]:
+            dest_path = dest_folder_node['parent_path'] + '.' + dest_folder_node['name']
+        else:
+            dest_path = dest_folder_node['name']
+        if source_folder_node["parent_path"]:
+            source_path = source_folder_node['parent_path'] + '.' + source_folder_node['name']
+        else:
+            source_path = source_folder_node['name']
         request_data = {
             'status': 'pending',
             'submitted_by': data.submitted_by,
@@ -80,8 +88,8 @@ class APICopyRequest:
             'source_id': data.source_id,
             'note': data.note,
             'project_code': project_code,
-            'destination_path': dest_folder_node['parent_path'] + '.' + dest_folder_node['name'],
-            'source_path': source_folder_node['parent_path'] + '.' + source_folder_node['name'],
+            'destination_path': dest_path,
+            'source_path': source_path,
         }
         request_obj = RequestModel(**request_data)
         db.session.add(request_obj)
