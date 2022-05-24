@@ -12,13 +12,13 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import requests
+import httpx
 
 from app.config import ConfigClass
 
 
 class SrvEmail():
-    def send(self, subject, receiver, sender, content='', msg_type='plain', template=None, template_kwargs={}):
+    async def send(self, subject, receiver, sender, content='', msg_type='plain', template=None, template_kwargs={}):
         url = ConfigClass.EMAIL_SERVICE
         payload = {
             'subject': subject,
@@ -31,8 +31,9 @@ class SrvEmail():
         if template:
             payload['template'] = template
             payload['template_kwargs'] = template_kwargs
-        res = requests.post(
-            url=url,
-            json=payload
-        )
+        async with httpx.AsyncClient() as client:
+            res = await client.post(
+                url=url,
+                json=payload
+            )
         return res.json()

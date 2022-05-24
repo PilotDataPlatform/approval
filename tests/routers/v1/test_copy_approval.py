@@ -16,7 +16,7 @@ import re
 from uuid import uuid4
 
 import pytest
-
+from tmp_common.common.project.project_client import ProjectClient
 from app.config import ConfigClass
 from tests.conftest import DEST_FOLDER_ID, FILE_DATA, FOLDER_DATA, SRC_FOLDER_ID
 
@@ -29,7 +29,6 @@ TEST_ID_3 = str(uuid4())
 def test_create_request_200(
     test_client,
     httpx_mock,
-    requests_mocker,
     mock_project,
     mock_src,
     mock_dest,
@@ -48,9 +47,13 @@ def test_create_request_200(
         json=mock_data,
         status_code=200
     )
-
+    
     # mock notification
-    requests_mocker.post(ConfigClass.EMAIL_SERVICE, json={})
+    httpx_mock.add_response(
+        method='POST',
+        url=ConfigClass.EMAIL_SERVICE,
+        json={}
+    )
 
     # mock get file list
     mock_data = {
@@ -78,7 +81,7 @@ def test_create_request_200(
 
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
-def test_list_requests_200(test_client, requests_mocker):
+def test_list_requests_200(test_client):
     payload = {
         'status': 'pending'
     }
@@ -89,7 +92,7 @@ def test_list_requests_200(test_client, requests_mocker):
 
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
-def test_list_request_files_200(test_client, requests_mocker):
+def test_list_request_files_200(test_client):
     payload = {
         'status': 'pending'
     }
@@ -110,7 +113,7 @@ def test_list_request_files_200(test_client, requests_mocker):
 
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
-def test_list_request_files_query_200(test_client, requests_mocker):
+def test_list_request_files_query_200(test_client):
     payload = {
         'status': 'pending',
     }
@@ -132,7 +135,7 @@ def test_list_request_files_query_200(test_client, requests_mocker):
 
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
-def test_approve_partial_files_200(test_client, requests_mocker, mock_project):
+def test_approve_partial_files_200(test_client, httpx_mock, mock_project):
     payload = {
         'status': 'pending'
     }
@@ -140,7 +143,10 @@ def test_approve_partial_files_200(test_client, requests_mocker, mock_project):
     request_obj = response.json()['result'][0]
 
     # mock trigger pipeline
-    requests_mocker.post(ConfigClass.DATA_UTILITY_SERVICE + 'files/actions', json={'result': ''})
+    httpx_mock.add_response(
+        method='POST',
+        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions',
+        json={'result': ''})
 
     payload = {
         'entity_ids': [
@@ -163,7 +169,7 @@ def test_approve_partial_files_200(test_client, requests_mocker, mock_project):
 
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
-def test_approve_all_files_200(test_client, requests_mocker, mock_project):
+def test_approve_all_files_200(test_client, httpx_mock, mock_project):
     payload = {
         'status': 'pending'
     }
@@ -171,7 +177,10 @@ def test_approve_all_files_200(test_client, requests_mocker, mock_project):
     request_obj = response.json()['result'][0]
 
     # mock trigger pipeline
-    requests_mocker.post(ConfigClass.DATA_UTILITY_SERVICE + 'files/actions', json={'result': ''})
+    httpx_mock.add_response(
+        method='POST',
+        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions',
+        json={'result': ''})
 
     payload = {
         'request_id': request_obj['id'],
@@ -191,7 +200,7 @@ def test_approve_all_files_200(test_client, requests_mocker, mock_project):
 
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
-def test_complete_request_200(test_client, requests_mocker, mock_user, mock_project):
+def test_complete_request_200(test_client, httpx_mock, mock_user, mock_project):
     payload = {
         'status': 'pending'
     }
@@ -199,7 +208,11 @@ def test_complete_request_200(test_client, requests_mocker, mock_user, mock_proj
     request_obj = response.json()['result'][0]
 
     # mock notification
-    requests_mocker.post(ConfigClass.EMAIL_SERVICE, json={})
+    httpx_mock.add_response(
+        method='POST',
+        url=ConfigClass.EMAIL_SERVICE,
+        json={}
+    )
 
     payload = {
         'request_id': request_obj['id'],
@@ -217,7 +230,6 @@ def test_complete_request_200(test_client, requests_mocker, mock_user, mock_proj
 def test_create_request_sub_file_200(
     test_client,
     httpx_mock,
-    requests_mocker,
     mock_project,
     mock_dest,
     mock_src,
@@ -229,7 +241,11 @@ def test_create_request_sub_file_200(
     file_data['parent_path'] = ''
 
     # mock notification
-    requests_mocker.post(ConfigClass.EMAIL_SERVICE, json={})
+    httpx_mock.add_response(
+        method='POST',
+        url=ConfigClass.EMAIL_SERVICE,
+        json={}
+    )
 
     mock_data = {'result': [file_data]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/batch.*$')
@@ -264,7 +280,7 @@ def test_create_request_sub_file_200(
     assert response.json()['result']['note'] == 'testing'
 
 
-def test_deny_partial_files_200(test_client, requests_mocker):
+def test_deny_partial_files_200(test_client):
     payload = {
         'status': 'pending'
     }
@@ -294,7 +310,6 @@ def test_deny_partial_files_200(test_client, requests_mocker):
 def test_partial_approved_200(
     test_client,
     httpx_mock,
-    requests_mocker,
     mock_dest,
     mock_src,
     mock_user,
@@ -316,7 +331,10 @@ def test_partial_approved_200(
     )
 
     # mock trigger pipeline
-    requests_mocker.post(ConfigClass.DATA_UTILITY_SERVICE + 'files/actions', json={'result': ''})
+    httpx_mock.add_response(
+        method='POST',
+        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions',
+        json={'result': ''})
 
     # entity_geids file
     mock_data = {'result': [FILE_DATA_2]}
@@ -329,7 +347,11 @@ def test_partial_approved_200(
     )
 
     # mock notification
-    requests_mocker.post(ConfigClass.EMAIL_SERVICE, json={})
+    httpx_mock.add_response(
+        method='POST',
+        url=ConfigClass.EMAIL_SERVICE,
+        json={}
+    )
 
     payload = {
         'entity_ids': [FILE_DATA['id'], FILE_DATA_2['id']],
@@ -386,7 +408,6 @@ def test_partial_approved_200(
 
 def test_complete_pending_400(
     test_client,
-    requests_mocker,
     httpx_mock,
     mock_dest,
     mock_src,
@@ -408,7 +429,11 @@ def test_complete_pending_400(
     )
 
     # mock notification
-    requests_mocker.post(ConfigClass.EMAIL_SERVICE, json={})
+    httpx_mock.add_response(
+        method='POST',
+        url=ConfigClass.EMAIL_SERVICE,
+        json={}
+    )
 
     # mock get file list
     mock_data = {

@@ -12,39 +12,44 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import requests
-
-from app.commons.neo4j_services import query_node
+import httpx
+from app.commons.project_services import query_project
 from app.commons.notifier_service.email_service import SrvEmail
 from app.config import ConfigClass
 
 
-def get_user(username: str) -> dict:
+async def get_user(username: str) -> dict:
     query = {
         'username': username,
         'exact': True,
     }
-    response = requests.get(ConfigClass.AUTH_SERVICE + 'admin/user', params=query)
+    async with httpx.AsyncClient() as client:
+        response = await client.get(ConfigClass.AUTH_SERVICE + 'admin/user', params=query)
     if response.status_code != 200:
         raise Exception(f'Error getting user {username} from auth service: ' + str(response.json()))
     return response.json()['result']
 
 
-def notify_project_admins(username: str, project_code: str, request_timestamp: str):
-    user_node = get_user(username)
-
-    project_node = query_node('Container', {'code': project_code})
-
+async def notify_project_admins(
+    username: str,
+    project_code: str,
+    request_timestamp: str
+):
+    user_node = await get_user(username)
+    project = await query_project(project_code)
     payload = {
         'role_names': [f'{project_code}-admin'],
         'status': 'active',
     }
-    response = requests.post(ConfigClass.AUTH_SERVICE + 'admin/roles/users', json=payload)
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            ConfigClass.AUTH_SERVICE + 'admin/roles/users',
+            json=payload
+        )
     project_admins = response.json()['result']
-
     for project_admin in project_admins:
         email_service = SrvEmail()
-        email_service.send(
+        await email_service.send(
             'A new request to copy data to Core needs your approval',
             project_admin['email'],
             ConfigClass.EMAIL_SUPPORT,
@@ -54,18 +59,18 @@ def notify_project_admins(username: str, project_code: str, request_timestamp: s
                 'admin_first_name': project_admin.get('first_name', project_admin['username']),
                 'user_first_name': user_node.get('first_name', user_node['username']),
                 'user_last_name': user_node.get('last_name'),
-                'project_name': project_node['name'],
+                'project_name': project.name,
                 'request_timestamp': request_timestamp,
             },
         )
 
 
-def notify_user(username: str, admin_username: str, project_code: str, request_timestamp: str, complete_timestamp: str):
-    user_node = get_user(username)
-    admin_node = get_user(admin_username)
-    project_node = query_node('Container', {'code': project_code})
+async def notify_user(username: str, admin_username: str, project_code: str, request_timestamp: str, complete_timestamp: str):
+    user_node = await get_user(username)
+    admin_node = await get_user(admin_username)
+    project = await query_project(project_code)
     email_service = SrvEmail()
-    email_service.send(
+    await email_service.send(
         'Your request to copy data to Core is Completed',
         user_node['email'],
         ConfigClass.EMAIL_SUPPORT,
@@ -77,6 +82,6 @@ def notify_user(username: str, admin_username: str, project_code: str, request_t
             'admin_last_name': admin_node.get('last_name'),
             'request_timestamp': request_timestamp,
             'complete_timestamp': complete_timestamp,
-            'project_name': project_node['name'],
+            'project_name': project.name,
         },
     )

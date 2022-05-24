@@ -12,17 +12,18 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from crypt import methods
 from uuid import uuid4
 
 import pytest
-import requests_mock
+from pytest_httpx import HTTPXMock
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.schema import CreateSchema, CreateTable
 from sqlalchemy_utils import create_database, database_exists
 from testcontainers.postgres import PostgresContainer
-
+from aioredis import StrictRedis
 from app.config import ConfigClass
 from app.main import create_app
 from app.models.copy_request_sql import Base, EntityModel, RequestModel
@@ -68,34 +69,43 @@ USER_DATA = {
     'email': 'greg@test.com',
 }
 
-
-@pytest.fixture(scope='function')
-def requests_mocker(request):
-    kw = {'real_http': True}
-    with requests_mock.Mocker(**kw) as m:
-        yield m
-
+class TestProject:
+    id=1234
+    labels=['Container']
+    global_entity_id = 'test-project-id'
+    code = 'testproject'
+    roles = ['admin', 'collaborator', 'contributor']
+    type = 'Usecase'
+    tags = ['tag1', 'tag2', 'tag3']
+    path = 'testproject'
+    time_lastmodified = '2022-04-06T20:25:07'
+    discoverable = True
+    system_tags = ['copied-to-core']
+    name = 'Fake Test Project'
+    time_created = '2021-05-07T16:14:18'
 
 @pytest.fixture
-def mock_project(requests_mocker):
+def mock_project(mocker):
     # mock get project
-    mock_data = [{
-        'global_entity_id': 'testproject',
-        'code': 'testing',
-        'name': 'Testing',
-    }]
-    requests_mocker.post(ConfigClass.NEO4J_SERVICE + 'nodes/Container/query', json=mock_data)
+    mocker.patch(
+        'tmp_common.common.project.project_client.ProjectClient.get',
+        return_value=TestProject
+    )
 
 
 @pytest.fixture
-def mock_user(requests_mocker):
+def mock_user(httpx_mock: HTTPXMock):
     # mock get user
     user_data = {'result': USER_DATA}
-    requests_mocker.get(ConfigClass.AUTH_SERVICE + 'admin/user', json=user_data)
+    httpx_mock.add_response(
+        method='GET',
+        url=ConfigClass.AUTH_SERVICE + 'admin/user?username=admin&exact=true',
+        json=user_data
+        )
 
 
 @pytest.fixture
-def mock_roles(requests_mocker):
+def mock_roles(httpx_mock: HTTPXMock):
     result = {
         'result': [{
             'email': 'fake@fake.com',
@@ -103,7 +113,11 @@ def mock_roles(requests_mocker):
             'first_name': 'fake',
         }],
     }
-    requests_mocker.post(ConfigClass.AUTH_SERVICE + 'admin/roles/users', json=result)
+    httpx_mock.add_response(
+        method='POST',
+        url=ConfigClass.AUTH_SERVICE + 'admin/roles/users',
+        json=result
+    )
 
 
 @pytest.fixture

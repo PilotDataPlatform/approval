@@ -67,7 +67,7 @@ class APICopyRequest:
         response_model=POSTRequestResponse,
         summary='Create a copy request'
     )
-    def create_request(self, project_code: str, data: POSTRequest):
+    async def create_request(self, project_code: str, data: POSTRequest):
         logger.info('Create Request called')
         api_response = APIResponse()
 
@@ -107,7 +107,7 @@ class APICopyRequest:
             create_entity_from_node(request_obj.id, entity)
 
         submitted_at = request_obj.submitted_at.strftime('%Y-%m-%d %H:%M:%S')
-        notify_project_admins(data.submitted_by, project_code, submitted_at)
+        await notify_project_admins(data.submitted_by, project_code, submitted_at)
         api_response.result = request_obj.to_dict()
         return api_response.json_response()
 
@@ -204,7 +204,7 @@ class APICopyRequest:
         response_model=PUTRequestFilesResponse,
         summary='Approve all files and trigger copy pipeline'
     )
-    def review_all_files(self, project_code: str, data: PUTRequestFiles, request: Request):
+    async def review_all_files(self, project_code: str, data: PUTRequestFiles, request: Request):
         logger.info('Review all files called')
         api_response = APIResponse()
         review_status = data.review_status
@@ -228,7 +228,7 @@ class APICopyRequest:
                     'Authorization': request.headers.get('Authorization').replace('Bearer ', ''),
                     'Refresh-Token': request.headers.get('Refresh-Token'),
                 }
-                copy_result = trigger_copy_pipeline(
+                copy_result = await trigger_copy_pipeline(
                     str(request_obj.id),
                     request_obj.project_code,
                     request_obj.source_id,
@@ -250,7 +250,7 @@ class APICopyRequest:
         response_model=PUTRequestFilesResponse,
         summary='Approve files and trigger copy pipeline'
     )
-    def review_files(self, project_code: str, data: PATCHRequestFiles, request: Request):
+    async def review_files(self, project_code: str, data: PATCHRequestFiles, request: Request):
         logger.info('Review files called')
         api_response = APIResponse()
         review_status = data.review_status
@@ -271,7 +271,7 @@ class APICopyRequest:
                     'Authorization': request.headers.get('Authorization').replace('Bearer ', ''),
                     'Refresh-Token': request.headers.get('Refresh-Token'),
                 }
-                copy_result = trigger_copy_pipeline(
+                copy_result = await trigger_copy_pipeline(
                     str(request_obj.id),
                     request_obj.project_code,
                     request_obj.source_id,
@@ -292,7 +292,7 @@ class APICopyRequest:
         response_model=PUTRequestFilesResponse,
         summary='Approve files'
     )
-    def complete_request(self, project_code: str, data: PUTRequest):
+    async def complete_request(self, project_code: str, data: PUTRequest):
         logger.info('Complete request called')
         api_response = APIResponse()
 
@@ -331,7 +331,13 @@ class APICopyRequest:
 
         submitted_at = request_obj.submitted_at.strftime('%Y-%m-%d %H:%M:%S')
         completed_at = request_obj.completed_at.strftime('%Y-%m-%d %H:%M:%S')
-        notify_user(request_obj.submitted_by, data.username, project_code, submitted_at, completed_at)
+        await notify_user(
+            request_obj.submitted_by,
+            data.username,
+            project_code,
+            submitted_at,
+            completed_at
+        )
         api_response.result = {
             'status': data.status,
             'pending_entities': [],
@@ -345,7 +351,11 @@ class APICopyRequest:
         response_model=GETPendingResponse,
         summary='Get pending count'
     )
-    def get_pending(self, project_code: str, params: GETRequestPending = Depends(GETRequestPending)):
+    def get_pending(
+        self,
+        project_code: str,
+        params: GETRequestPending = Depends(GETRequestPending)
+    ):
         logger.info('Get Pending called')
         api_response = APIResponse()
 
@@ -368,10 +378,15 @@ class APICopyRequest:
         }
         return api_response.json_response()
 
-    @router.delete('/request/copy/{project_code}/delete/{request_id}', tags=[_API_TAG], summary='Delete Request')
+    @router.delete(
+        '/request/copy/{project_code}/delete/{request_id}',
+        tags=[_API_TAG],
+        summary='Delete Request'
+    )
     def delete_request(self, project_code: str, request_id: str):
         api_response = APIResponse()
-        request_files = db.session.query(EntityModel).filter_by(request_id=request_id)
+        request_files = db.session.query(
+            EntityModel).filter_by(request_id=request_id)
         for request_file in request_files:
             db.session.delete(request_file)
         db.session.commit()

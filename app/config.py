@@ -53,10 +53,10 @@ class Settings(BaseSettings):
     host: str = '0.0.0.0'
 
     AUTH_SERVICE: str
-    NEO4J_SERVICE: str
     DATA_OPS_UTIL: str
     EMAIL_SERVICE: str
-    META_SERVICE: str
+    METADATA_SERVICE: str
+    PROJECT_SERVICE: str
 
     RDS_SCHEMA_DEFAULT: str
     RDS_DB_URI: str
@@ -66,16 +66,21 @@ class Settings(BaseSettings):
     CORE_ZONE_LABEL: str
     GREEN_ZONE_LABEL: str
 
+    REDIS_DB: str
+    REDIS_HOST: str
+    REDIS_PASSWORD: str
+    REDIS_PORT: str
+
     def __init__(self, *args: Any, **kwds: Any) -> None:
         super().__init__(*args, **kwds)
 
         self.AUTH_SERVICE = self.AUTH_SERVICE + '/v1/'
-        NEO4J_HOST = self.NEO4J_SERVICE
-        self.NEO4J_SERVICE = NEO4J_HOST + '/v1/neo4j/'
-        self.NEO4J_SERVICE_V2 = NEO4J_HOST + '/v2/neo4j/'
         self.DATA_UTILITY_SERVICE = self.DATA_OPS_UTIL + '/v1/'
         self.EMAIL_SERVICE = self.EMAIL_SERVICE + '/v1/email'
-        self.META_SERVICE = self.META_SERVICE + '/v1/'
+        self.META_SERVICE = self.METADATA_SERVICE + '/v1/'
+        self.REDIS_DB_URI = (
+            f'redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:'
+            f'{self.REDIS_PORT}')
 
     class Config:
         env_file = '.env'
