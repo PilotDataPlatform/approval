@@ -16,7 +16,6 @@ import re
 from uuid import uuid4
 
 import pytest
-from tmp_common.common.project.project_client import ProjectClient
 from app.config import ConfigClass
 from tests.conftest import DEST_FOLDER_ID, FILE_DATA, FOLDER_DATA, SRC_FOLDER_ID
 

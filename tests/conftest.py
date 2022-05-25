@@ -88,7 +88,7 @@ class TestProject:
 def mock_project(mocker):
     # mock get project
     mocker.patch(
-        'tmp_common.common.project.project_client.ProjectClient.get',
+        'common.project.project_client.ProjectClient.get',
         return_value=TestProject
     )
 
