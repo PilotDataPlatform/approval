@@ -16,6 +16,7 @@
 from app.config import ConfigClass
 from common.project.project_client import ProjectClient
 
+
 async def query_project(project_code: str) -> dict:
     project_client = ProjectClient(
         ConfigClass.PROJECT_SERVICE,
