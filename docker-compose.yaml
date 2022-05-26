@@ -1,22 +1,11 @@
 version: '3'
 services:
   web:
-    build:
-      context: .
+    build: .
     ports:
       - "8000:8000"
-    environment:
-      - env="dev"
-      - port=8000
-      - CONFIG_CENTER_ENABLED=false
-      - RDS_DB_URI=postgresql://postgres:postgres@db:5432/approval_db
-      - RDS_SCHEMA_DEFAULT=test_schema
-      - NEO4J_SERVICE=http://127.0.0.1
-      - DATA_OPS_UTIL=http://127.0.0.1
-      - EMAIL_SERVICE=http://127.0.0.1
-      - AUTH_SERVICE=http://127.0.0.1
-      - GREEN_ZONE_LABEL=Greenroom
-      - CORE_ZONE_LABEL=Core
+    volumes:
+      - .:/usr/src/app
   db:
     image: 'postgres:14.1'
     ports:

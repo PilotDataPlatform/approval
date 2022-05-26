@@ -12,10 +12,10 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import requests
+import httpx
 from common import LoggerFactory
 
-from app.commons.neo4j_services import query_node
+from app.commons.project_services import query_project
 from app.config import ConfigClass
 from app.models.base import EAPIResponseCode
 from app.resources.error_handler import APIException
@@ -23,7 +23,7 @@ from app.resources.error_handler import APIException
 logger = LoggerFactory('api_copy_request').get_logger()
 
 
-def trigger_copy_pipeline(
+async def trigger_copy_pipeline(
     request_id: str,
     project_code: str,
     source_id: str,
@@ -34,7 +34,7 @@ def trigger_copy_pipeline(
     auth: dict,
 ) -> dict:
 
-    project_node = query_node('Container', {'code': project_code})
+    project_node = await query_project(project_code)
     copy_data = {
         'payload': {
             'targets': [{'geid': str(i)} for i in entity_ids],
@@ -44,10 +44,14 @@ def trigger_copy_pipeline(
         },
         'operator': username,
         'operation': 'copy',
-        'project_geid': project_node['global_entity_id'],
+        'project_geid': project_node.id,
         'session_id': session_id,
     }
-    response = requests.post(ConfigClass.DATA_UTILITY_SERVICE + 'files/actions', json=copy_data, headers=auth)
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            ConfigClass.DATA_UTILITY_SERVICE + 'files/actions',
+            json=copy_data,
+            headers=auth)
     if response.status_code >= 300:
         error_msg = f'Failed to start copy pipeline: {response.content}'
         logger.error(error_msg)
