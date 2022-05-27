@@ -1,0 +1,90 @@
+{"asctime": "2022-05-25 14:12:12,290", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-25 14:12:12,905", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-25 14:12:12,945", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-25 14:12:12,961", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List request files called"}
+{"asctime": "2022-05-25 14:12:12,994", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-25 14:12:13,010", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List request files called"}
+{"asctime": "2022-05-25 14:12:13,041", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-25 14:12:13,054", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-25 14:12:13,069", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Triggering pipeline for ['5c74b2cd-1b55-4da5-b316-21b30cc4fa18']"}
+{"asctime": "2022-05-25 14:12:13,077", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Pipeline trigger for 0 files"}
+{"asctime": "2022-05-25 14:12:13,099", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-25 14:12:13,113", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review all files called"}
+{"asctime": "2022-05-25 14:12:13,125", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Triggering pipeline for [UUID('14d7e65a-9880-4d2b-a6f5-919d18c6d8d7'), UUID('5c74b2cd-1b55-4da5-b316-21b30cc4fa18')]"}
+{"asctime": "2022-05-25 14:12:13,134", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Pipeline trigger for 0 files"}
+{"asctime": "2022-05-25 14:12:13,159", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-25 14:12:13,175", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Complete request called"}
+{"asctime": "2022-05-25 14:12:13,230", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-25 14:12:13,318", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-25 14:12:13,330", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-25 14:12:13,365", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-25 14:12:13,443", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-25 14:12:13,455", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-25 14:12:13,463", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Triggering pipeline for ['e4653ba6-dfe2-44cf-bb16-f1a1376d8e3c']"}
+{"asctime": "2022-05-25 14:12:13,473", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Pipeline trigger for 0 files"}
+{"asctime": "2022-05-25 14:12:13,497", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-25 14:12:13,570", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Complete request called"}
+{"asctime": "2022-05-25 14:12:13,584", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "2 pending files in request"}
+{"asctime": "2022-05-25 14:12:13,646", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-25 14:12:13,658", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Get Pending called"}
+{"asctime": "2022-05-25 14:12:13,662", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "2 pending files in request"}
+{"asctime": "2022-05-26 09:44:01,568", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-26 09:44:01,867", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 09:44:01,902", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 09:44:01,915", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List request files called"}
+{"asctime": "2022-05-26 09:44:01,945", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 09:44:01,959", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List request files called"}
+{"asctime": "2022-05-26 09:44:01,996", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 09:44:02,009", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-26 09:44:02,023", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Triggering pipeline for ['36a2080f-8b94-4844-ab1f-0e97fe8ddbd2']"}
+{"asctime": "2022-05-26 09:44:02,033", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Pipeline trigger for 0 files"}
+{"asctime": "2022-05-26 09:44:02,058", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 09:44:02,071", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review all files called"}
+{"asctime": "2022-05-26 09:44:02,084", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Triggering pipeline for [UUID('feb34e6c-ecfa-4f3c-96d9-013e8fbaa849'), UUID('36a2080f-8b94-4844-ab1f-0e97fe8ddbd2')]"}
+{"asctime": "2022-05-26 09:44:02,093", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Pipeline trigger for 0 files"}
+{"asctime": "2022-05-26 09:44:02,120", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 09:44:02,134", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Complete request called"}
+{"asctime": "2022-05-26 09:44:02,191", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-26 09:44:02,283", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 09:44:02,296", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-26 09:44:02,331", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-26 09:44:02,408", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-26 09:44:02,419", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-26 09:44:02,427", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Triggering pipeline for ['9e52b647-d506-4a00-8533-b391778c5f66']"}
+{"asctime": "2022-05-26 09:44:02,436", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Pipeline trigger for 0 files"}
+{"asctime": "2022-05-26 09:44:02,462", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-26 09:44:02,542", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Complete request called"}
+{"asctime": "2022-05-26 09:44:02,559", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "2 pending files in request"}
+{"asctime": "2022-05-26 09:44:02,582", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 09:44:02,596", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Get Pending called"}
+{"asctime": "2022-05-26 09:44:02,600", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "2 pending files in request"}
+{"asctime": "2022-05-26 10:05:51,533", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-26 10:05:51,634", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 10:05:51,669", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 10:05:51,684", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List request files called"}
+{"asctime": "2022-05-26 10:05:51,711", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 10:05:51,725", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List request files called"}
+{"asctime": "2022-05-26 10:05:51,756", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 10:05:51,771", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-26 10:05:51,781", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Triggering pipeline for ['c18f0e90-db1c-4295-9858-601ae4b7de29']"}
+{"asctime": "2022-05-26 10:05:51,789", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Pipeline trigger for 0 files"}
+{"asctime": "2022-05-26 10:05:51,811", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 10:05:51,825", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review all files called"}
+{"asctime": "2022-05-26 10:05:51,837", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Triggering pipeline for [UUID('602ce4fc-8d03-480e-a33c-d31af4f6d5e0'), UUID('c18f0e90-db1c-4295-9858-601ae4b7de29')]"}
+{"asctime": "2022-05-26 10:05:51,845", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Pipeline trigger for 0 files"}
+{"asctime": "2022-05-26 10:05:51,870", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 10:05:51,882", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Complete request called"}
+{"asctime": "2022-05-26 10:05:51,932", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-26 10:05:52,014", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 10:05:52,026", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-26 10:05:52,059", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-26 10:05:52,124", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-26 10:05:52,132", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Review files called"}
+{"asctime": "2022-05-26 10:05:52,137", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Triggering pipeline for ['8e6bce57-4b35-4c78-b811-f64287a8c4f7']"}
+{"asctime": "2022-05-26 10:05:52,146", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Pipeline trigger for 0 files"}
+{"asctime": "2022-05-26 10:05:52,170", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Create Request called"}
+{"asctime": "2022-05-26 10:05:52,236", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Complete request called"}
+{"asctime": "2022-05-26 10:05:52,279", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "2 pending files in request"}
+{"asctime": "2022-05-26 10:05:52,299", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "List Requests called"}
+{"asctime": "2022-05-26 10:05:52,312", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "Get Pending called"}
+{"asctime": "2022-05-26 10:05:52,316", "namespace": "unknown", "sub_name": "api_copy_request", "level": "INFO", "message": "2 pending files in request"}

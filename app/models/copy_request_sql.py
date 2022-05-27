@@ -70,7 +70,6 @@ class EntityModel(Base):
     copy_status = Column(String())
     name = Column(String())
     uploaded_by = Column(String(), nullable=True)
-    dcm_id = Column(String(), nullable=True)
     uploaded_at = Column(DateTime(), default=datetime.utcnow)
     file_size = Column(BigInteger(), nullable=True)
 
