@@ -27,4 +27,3 @@ Port can be configured in with environment variable `PORT`
 - API: http://localhost:8000
 - API documentation: http://localhost:8000/v1/api-doc
 
-
