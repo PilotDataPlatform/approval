@@ -48,7 +48,6 @@ def upgrade():
     sa.Column('copy_status', sa.String(), nullable=True),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('uploaded_by', sa.String(), nullable=True),
-    sa.Column('dcm_id', sa.String(), nullable=True),
     sa.Column('uploaded_at', sa.DateTime(), nullable=True),
     sa.Column('file_size', sa.BigInteger(), nullable=True),
     sa.ForeignKeyConstraint(['request_id'], ['pilot_approval.approval_request.id'], ),

@@ -102,8 +102,7 @@ def create_entity_from_node(request_id: str, entity: dict) -> EntityModel:
         'parent_id': entity['parent'],
         'name': entity['name'],
         'uploaded_by': entity['owner'],
-        'uploaded_at': entity['created_time'],
-        'dcm_id': entity.get('dcm_id'),
+        'uploaded_at': entity['created_time']
     }
     if entity['type'] == 'file':
         entity_data['review_status'] = 'pending'
