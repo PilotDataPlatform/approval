@@ -76,7 +76,7 @@ class Settings(BaseSettings):
 
         self.AUTH_SERVICE = self.AUTH_SERVICE + '/v1/'
         self.DATA_UTILITY_SERVICE = self.DATA_OPS_UTIL + '/v1/'
-        self.EMAIL_SERVICE = self.EMAIL_SERVICE + '/v1/email'
+        self.EMAIL_SERVICE = self.EMAIL_SERVICE + '/v1/email/'
         self.META_SERVICE = self.METADATA_SERVICE + '/v1/'
         self.REDIS_DB_URI = (
             f'redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:'
