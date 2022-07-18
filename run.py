@@ -12,12 +12,17 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import alembic.command
 import uvicorn
+from alembic.config import Config
 
 from app.config import ConfigClass
 from app.main import create_app
 
+alembic_config = Config('alembic.ini')
+
 app = create_app()
 
 if __name__ == '__main__':
+    alembic.command.upgrade(alembic_config, 'head')
     uvicorn.run('run:app', host=ConfigClass.host, port=ConfigClass.port, log_level='info', reload=True)
