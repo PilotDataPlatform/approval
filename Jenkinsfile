@@ -99,7 +99,7 @@ pipeline {
     stage('STAGING Remove image') {
       when {branch "main"}
       steps{
-        sh "tar rmi $imagename_staging:$commit"
+        sh "docker rmi $imagename_staging:$commit"
       }
     }
 
