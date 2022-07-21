@@ -49,7 +49,7 @@ pipeline {
       steps{
         script {
             docker.withRegistry('https://ghcr.io', registryCredential) {
-                customImage = docker.build("$imagename_dev:$commit", "--add-host git.indocresearch.org:10.4.3.151 --target web-image .")
+                customImage = docker.build("$imagename_dev:$commit-CAC", "--add-host git.indocresearch.org:10.4.3.151 --target web-image .")
                 customImage.push()
             }
         }
@@ -58,7 +58,7 @@ pipeline {
     stage('DEV Remove image') {
       when {branch "develop"}
       steps{
-        sh "docker rmi $imagename_dev:$commit"
+        sh "docker rmi $imagename_dev:$commit-CAC"
       }
     }
 
@@ -68,7 +68,7 @@ pipeline {
         build(job: "/VRE-IaC/UpdateAppVersion", parameters: [
           [$class: 'StringParameterValue', name: 'TF_TARGET_ENV', value: 'dev' ],
           [$class: 'StringParameterValue', name: 'TARGET_RELEASE', value: 'approval' ],
-          [$class: 'StringParameterValue', name: 'NEW_APP_VERSION', value: "$commit" ]
+          [$class: 'StringParameterValue', name: 'NEW_APP_VERSION', value: "$commit-CAC" ]
       ])
       }
     }
