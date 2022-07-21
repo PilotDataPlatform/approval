@@ -86,7 +86,7 @@ jobs:
           # build on feature branches, push only on main branch
           push: ${{ github.event_name != 'pull_request' }}
   Trigger-jenkins:
-    needs: [build-and-push-docker-image]
+    needs: [build-and-push-docker-image-alembic, build-and-push-docker-image-approval]
     # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Trigger jenkins job
     runs-on: ubuntu-latest
