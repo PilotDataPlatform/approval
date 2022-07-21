@@ -46,7 +46,7 @@ def test_create_request_200(
         json=mock_data,
         status_code=200
     )
-    
+
     # mock notification
     httpx_mock.add_response(
         method='POST',
@@ -144,7 +144,7 @@ def test_approve_partial_files_200(test_client, httpx_mock, mock_project):
     # mock trigger pipeline
     httpx_mock.add_response(
         method='POST',
-        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions',
+        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/',
         json={'result': ''})
 
     payload = {
@@ -178,7 +178,7 @@ def test_approve_all_files_200(test_client, httpx_mock, mock_project):
     # mock trigger pipeline
     httpx_mock.add_response(
         method='POST',
-        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions',
+        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/',
         json={'result': ''})
 
     payload = {
@@ -332,7 +332,7 @@ def test_partial_approved_200(
     # mock trigger pipeline
     httpx_mock.add_response(
         method='POST',
-        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions',
+        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/',
         json={'result': ''})
 
     # entity_geids file

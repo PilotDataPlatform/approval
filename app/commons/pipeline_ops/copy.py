@@ -15,7 +15,6 @@
 import httpx
 from common import LoggerFactory
 
-from app.commons.project_services import query_project
 from app.config import ConfigClass
 from app.models.base import EAPIResponseCode
 from app.resources.error_handler import APIException
@@ -34,22 +33,21 @@ async def trigger_copy_pipeline(
     auth: dict,
 ) -> dict:
 
-    project_node = await query_project(project_code)
     copy_data = {
         'payload': {
-            'targets': [{'geid': str(i)} for i in entity_ids],
+            'targets': [{'id': str(i)} for i in entity_ids],
             'destination': str(destination_id),
             'source': str(source_id),
             'request_id': request_id,
         },
         'operator': username,
         'operation': 'copy',
-        'project_geid': project_node.id,
+        'project_code': project_code,
         'session_id': session_id,
     }
     async with httpx.AsyncClient() as client:
         response = await client.post(
-            ConfigClass.DATA_UTILITY_SERVICE + 'files/actions',
+            ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/',
             json=copy_data,
             headers=auth)
     if response.status_code >= 300:

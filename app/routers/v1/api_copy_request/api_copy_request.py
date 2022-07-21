@@ -269,7 +269,6 @@ class APICopyRequest:
                 request_obj: RequestModel = db.session.query(RequestModel).get(data.request_id)
                 auth = {
                     'Authorization': request.headers.get('Authorization').replace('Bearer ', ''),
-                    'Refresh-Token': request.headers.get('Refresh-Token'),
                 }
                 copy_result = await trigger_copy_pipeline(
                     str(request_obj.id),
