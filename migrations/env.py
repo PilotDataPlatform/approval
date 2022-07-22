@@ -4,6 +4,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+from app.config import ConfigClass
 from app.models.copy_request_sql import Base
 
 # this is the Alembic Config object, which provides
@@ -20,9 +21,11 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
 
-if not os.environ.get('DB_URI'):
-    raise Exception('Must set DB_URI environment var')
-config.set_main_option('sqlalchemy.url', os.environ.get('DB_URI'))
+if os.environ.get('DB_URI'):
+    # override default DB URI
+    config.set_main_option('sqlalchemy.url', os.environ.get('DB_URI') + '/approval')
+else:
+    config.set_main_option('sqlalchemy.url', ConfigClass.DB_URI)
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

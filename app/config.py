@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     HOST: str = '0.0.0.0'
 
     AUTH_SERVICE: str
-    DATA_OPS_UTIL: str
+    DATAOPS_SERVICE: str
     EMAIL_SERVICE: str
     METADATA_SERVICE: str
     PROJECT_SERVICE: str
@@ -69,7 +69,7 @@ class Settings(BaseSettings):
         super().__init__(*args, **kwds)
 
         self.AUTH_SERVICE = self.AUTH_SERVICE + '/v1/'
-        self.DATA_UTILITY_SERVICE = self.DATA_OPS_UTIL + '/v1/'
+        self.DATA_UTILITY_SERVICE = self.DATAOPS_SERVICE + '/v1/'
         self.EMAIL_SERVICE = self.EMAIL_SERVICE + '/v1/'
         self.META_SERVICE = self.METADATA_SERVICE + '/v1/'
         self.REDIS_URI = f'redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:' f'{self.REDIS_PORT}/{self.REDIS_DB}'
