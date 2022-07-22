@@ -12,18 +12,17 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from crypt import methods
 from uuid import uuid4
 
 import pytest
-from pytest_httpx import HTTPXMock
 from fastapi.testclient import TestClient
+from pytest_httpx import HTTPXMock
 from sqlalchemy import create_engine
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.schema import CreateSchema, CreateTable
 from sqlalchemy_utils import create_database, database_exists
 from testcontainers.postgres import PostgresContainer
-from aioredis import StrictRedis
+
 from app.config import ConfigClass
 from app.main import create_app
 from app.models.copy_request_sql import Base, EntityModel, RequestModel
@@ -69,9 +68,10 @@ USER_DATA = {
     'email': 'greg@test.com',
 }
 
+
 class TestProject:
-    id=1234
-    labels=['Container']
+    id = 1234
+    labels = ['Container']
     global_entity_id = 'test-project-id'
     code = 'testproject'
     roles = ['admin', 'collaborator', 'contributor']
@@ -84,13 +84,11 @@ class TestProject:
     name = 'Fake Test Project'
     time_created = '2021-05-07T16:14:18'
 
+
 @pytest.fixture
 def mock_project(mocker):
     # mock get project
-    mocker.patch(
-        'common.project.project_client.ProjectClient.get',
-        return_value=TestProject
-    )
+    mocker.patch('common.project.project_client.ProjectClient.get', return_value=TestProject)
 
 
 @pytest.fixture
@@ -98,26 +96,22 @@ def mock_user(httpx_mock: HTTPXMock):
     # mock get user
     user_data = {'result': USER_DATA}
     httpx_mock.add_response(
-        method='GET',
-        url=ConfigClass.AUTH_SERVICE + 'admin/user?username=admin&exact=true',
-        json=user_data
-        )
+        method='GET', url=ConfigClass.AUTH_SERVICE + 'admin/user?username=admin&exact=true', json=user_data
+    )
 
 
 @pytest.fixture
 def mock_roles(httpx_mock: HTTPXMock):
     result = {
-        'result': [{
-            'email': 'fake@fake.com',
-            'username': 'fake',
-            'first_name': 'fake',
-        }],
+        'result': [
+            {
+                'email': 'fake@fake.com',
+                'username': 'fake',
+                'first_name': 'fake',
+            }
+        ],
     }
-    httpx_mock.add_response(
-        method='POST',
-        url=ConfigClass.AUTH_SERVICE + 'admin/roles/users',
-        json=result
-    )
+    httpx_mock.add_response(method='POST', url=ConfigClass.AUTH_SERVICE + 'admin/roles/users', json=result)
 
 
 @pytest.fixture
@@ -128,10 +122,7 @@ def mock_src(httpx_mock):
     mock_folder['name'] = 'src_folder'
     mock_data = {'result': mock_folder}
     httpx_mock.add_response(
-        method='GET',
-        url=get_by_geid_url + '/' + str(SRC_FOLDER_ID) + '/',
-        json=mock_data,
-        status_code=200
+        method='GET', url=get_by_geid_url + '/' + str(SRC_FOLDER_ID) + '/', json=mock_data, status_code=200
     )
 
 
@@ -143,10 +134,7 @@ def mock_dest(httpx_mock):
     mock_folder['name'] = 'dest_folder'
     mock_data = {'result': mock_folder}
     httpx_mock.add_response(
-        method='GET',
-        url=get_by_geid_url + '/' + str(DEST_FOLDER_ID) + '/',
-        json=mock_data,
-        status_code=200
+        method='GET', url=get_by_geid_url + '/' + str(DEST_FOLDER_ID) + '/', json=mock_data, status_code=200
     )
 
 
@@ -167,7 +155,7 @@ def db():
 
 @pytest.fixture
 def test_client(db):
-    ConfigClass.RDS_DB_URI = db.get_connection_url()
+    ConfigClass.DB_URI = db.get_connection_url()
     app = create_app()
     client = TestClient(app)
     return client

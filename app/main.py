@@ -26,13 +26,10 @@ from .config import ConfigClass
 def create_app():
     """create app function."""
     app = FastAPI(
-        title='Service Approval',
-        description='Service Approval',
-        docs_url='/v1/api-doc',
-        version=ConfigClass.version
+        title='Service Approval', description='Service Approval', docs_url='/v1/api-doc', version=ConfigClass.version
     )
 
-    app.add_middleware(DBSessionMiddleware, db_url=ConfigClass.RDS_DB_URI)
+    app.add_middleware(DBSessionMiddleware, db_url=ConfigClass.DB_URI)
     app.add_middleware(
         CORSMiddleware,
         allow_origins='*',

@@ -2,11 +2,11 @@
 name = "service_approval"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Indoc Research"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-fastapi = "0.62.0"
+fastapi = "0.63.0"
 fastapi-utils = "0.2.1"
 uvicorn = "0.12.3"
 fastapi-sqlalchemy = "0.2.1"

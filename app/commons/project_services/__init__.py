@@ -13,14 +13,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from app.config import ConfigClass
 from common.project.project_client import ProjectClient
+
+from app.config import ConfigClass
 
 
 async def query_project(project_code: str) -> dict:
-    project_client = ProjectClient(
-        ConfigClass.PROJECT_SERVICE,
-        ConfigClass.REDIS_DB_URI
-    )
+    project_client = ProjectClient(ConfigClass.PROJECT_SERVICE, ConfigClass.REDIS_URI)
     project = await project_client.get(code=project_code)
     return project
