@@ -113,7 +113,7 @@ def test_approve_partial_files_200(test_client, httpx_mock, mock_project):
     request_obj = response.json()['result'][0]
 
     # mock trigger pipeline
-    httpx_mock.add_response(method='POST', url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions', json={'result': ''})
+    httpx_mock.add_response(method='POST', url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/', json={'result': ''})
 
     payload = {
         'entity_ids': [TEST_ID_1],
@@ -140,7 +140,7 @@ def test_approve_all_files_200(test_client, httpx_mock, mock_project):
     request_obj = response.json()['result'][0]
 
     # mock trigger pipeline
-    httpx_mock.add_response(method='POST', url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions', json={'result': ''})
+    httpx_mock.add_response(method='POST', url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/', json={'result': ''})
 
     payload = {
         'request_id': request_obj['id'],
@@ -244,7 +244,7 @@ def test_partial_approved_200(test_client, httpx_mock, mock_dest, mock_src, mock
     httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
     # mock trigger pipeline
-    httpx_mock.add_response(method='POST', url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions', json={'result': ''})
+    httpx_mock.add_response(method='POST', url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/', json={'result': ''})
 
     # entity_geids file
     mock_data = {'result': [FILE_DATA_2]}
