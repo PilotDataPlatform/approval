@@ -17,9 +17,11 @@ import httpx
 from app.config import ConfigClass
 
 
-class SrvEmail():
-    async def send(self, subject, receiver, sender, content='', msg_type='plain', template=None, template_kwargs={}):
-        url = ConfigClass.EMAIL_SERVICE
+class SrvEmail:
+    async def send(self, subject, receiver, sender, content='', msg_type='plain', template=None, template_kwargs=None):
+        if template_kwargs is None:
+            template_kwargs = {}
+        url = ConfigClass.EMAIL_SERVICE + 'email/'
         payload = {
             'subject': subject,
             'sender': sender,
@@ -32,8 +34,5 @@ class SrvEmail():
             payload['template'] = template
             payload['template_kwargs'] = template_kwargs
         async with httpx.AsyncClient() as client:
-            res = await client.post(
-                url=url,
-                json=payload
-            )
+            res = await client.post(url=url, json=payload)
         return res.json()

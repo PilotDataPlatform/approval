@@ -16,6 +16,7 @@ import re
 from uuid import uuid4
 
 import pytest
+
 from app.config import ConfigClass
 from tests.conftest import DEST_FOLDER_ID, FILE_DATA, FOLDER_DATA, SRC_FOLDER_ID
 
@@ -25,46 +26,22 @@ TEST_ID_3 = str(uuid4())
 
 
 @pytest.mark.dependency()
-def test_create_request_200(
-    test_client,
-    httpx_mock,
-    mock_project,
-    mock_src,
-    mock_dest,
-    mock_user,
-    mock_roles
-):
+def test_create_request_200(test_client, httpx_mock, mock_project, mock_src, mock_dest, mock_user, mock_roles):
     # entity_geids file
     FILE_DATA_1 = FILE_DATA.copy()
     FILE_DATA_1['id'] = TEST_ID_1
     FILE_DATA_1['parent'] = TEST_ID_2
     mock_data = {'result': [FILE_DATA_1, FOLDER_DATA]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/batch.*$')
-    httpx_mock.add_response(
-        method='GET',
-        url=url,
-        json=mock_data,
-        status_code=200
-    )
+    httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
     # mock notification
-    httpx_mock.add_response(
-        method='POST',
-        url=ConfigClass.EMAIL_SERVICE,
-        json={}
-    )
+    httpx_mock.add_response(method='POST', url=ConfigClass.EMAIL_SERVICE + 'email/', json={})
 
     # mock get file list
-    mock_data = {
-        'result': [FILE_DATA_1]
-    }
+    mock_data = {'result': [FILE_DATA_1]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/search.*$')
-    httpx_mock.add_response(
-        method='GET',
-        url=url,
-        json=mock_data,
-        status_code=200
-    )
+    httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
     payload = {
         'entity_ids': [TEST_ID_1, TEST_ID_2],
@@ -81,9 +58,7 @@ def test_create_request_200(
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
 def test_list_requests_200(test_client):
-    payload = {
-        'status': 'pending'
-    }
+    payload = {'status': 'pending'}
     response = test_client.get('/v1/request/copy/approval_fake_project', params=payload)
     assert response.status_code == 200
     assert response.json()['result'][0]['destination_id'] == DEST_FOLDER_ID
@@ -92,9 +67,7 @@ def test_list_requests_200(test_client):
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
 def test_list_request_files_200(test_client):
-    payload = {
-        'status': 'pending'
-    }
+    payload = {'status': 'pending'}
     response = test_client.get('/v1/request/copy/approval_fake_project', params=payload)
     request_obj = response.json()['result'][0]
 
@@ -135,26 +108,19 @@ def test_list_request_files_query_200(test_client):
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
 def test_approve_partial_files_200(test_client, httpx_mock, mock_project):
-    payload = {
-        'status': 'pending'
-    }
+    payload = {'status': 'pending'}
     response = test_client.get('/v1/request/copy/approval_fake_project', params=payload)
     request_obj = response.json()['result'][0]
 
     # mock trigger pipeline
-    httpx_mock.add_response(
-        method='POST',
-        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/',
-        json={'result': ''})
+    httpx_mock.add_response(method='POST', url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/', json={'result': ''})
 
     payload = {
-        'entity_ids': [
-            TEST_ID_1
-        ],
+        'entity_ids': [TEST_ID_1],
         'request_id': request_obj['id'],
         'review_status': 'approved',
         'username': 'admin',
-        'session_id': 'admin-123'
+        'session_id': 'admin-123',
     }
     headers = {
         'Authorization': 'fake',
@@ -169,23 +135,18 @@ def test_approve_partial_files_200(test_client, httpx_mock, mock_project):
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
 def test_approve_all_files_200(test_client, httpx_mock, mock_project):
-    payload = {
-        'status': 'pending'
-    }
+    payload = {'status': 'pending'}
     response = test_client.get('/v1/request/copy/approval_fake_project', params=payload)
     request_obj = response.json()['result'][0]
 
     # mock trigger pipeline
-    httpx_mock.add_response(
-        method='POST',
-        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/',
-        json={'result': ''})
+    httpx_mock.add_response(method='POST', url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/', json={'result': ''})
 
     payload = {
         'request_id': request_obj['id'],
         'review_status': 'approved',
         'username': 'admin',
-        'session_id': 'admin-123'
+        'session_id': 'admin-123',
     }
     headers = {
         'Authorization': 'fake',
@@ -200,18 +161,12 @@ def test_approve_all_files_200(test_client, httpx_mock, mock_project):
 
 @pytest.mark.dependency(depends=['test_create_request_200'])
 def test_complete_request_200(test_client, httpx_mock, mock_user, mock_project):
-    payload = {
-        'status': 'pending'
-    }
+    payload = {'status': 'pending'}
     response = test_client.get('/v1/request/copy/approval_fake_project', params=payload)
     request_obj = response.json()['result'][0]
 
     # mock notification
-    httpx_mock.add_response(
-        method='POST',
-        url=ConfigClass.EMAIL_SERVICE,
-        json={}
-    )
+    httpx_mock.add_response(method='POST', url=ConfigClass.EMAIL_SERVICE + 'email/', json={})
 
     payload = {
         'request_id': request_obj['id'],
@@ -226,45 +181,21 @@ def test_complete_request_200(test_client, httpx_mock, mock_user, mock_project):
     assert response.json()['result']['pending_count'] == 0
 
 
-def test_create_request_sub_file_200(
-    test_client,
-    httpx_mock,
-    mock_project,
-    mock_dest,
-    mock_src,
-    mock_user,
-    mock_roles
-):
+def test_create_request_sub_file_200(test_client, httpx_mock, mock_project, mock_dest, mock_src, mock_user, mock_roles):
     file_data = FILE_DATA.copy()
     file_data['id'] = str(uuid4())
     file_data['parent_path'] = ''
 
     # mock notification
-    httpx_mock.add_response(
-        method='POST',
-        url=ConfigClass.EMAIL_SERVICE,
-        json={}
-    )
+    httpx_mock.add_response(method='POST', url=ConfigClass.EMAIL_SERVICE + 'email/', json={})
 
     mock_data = {'result': [file_data]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/batch.*$')
-    httpx_mock.add_response(
-        method='GET',
-        url=url,
-        json=mock_data,
-        status_code=200
-    )
+    httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
-    mock_data = {
-        'result': [file_data]
-    }
+    mock_data = {'result': [file_data]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/search.*$')
-    httpx_mock.add_response(
-        method='GET',
-        url=url,
-        json=mock_data,
-        status_code=200
-    )
+    httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
     payload = {
         'entity_ids': [file_data['id']],
@@ -280,9 +211,7 @@ def test_create_request_sub_file_200(
 
 
 def test_deny_partial_files_200(test_client):
-    payload = {
-        'status': 'pending'
-    }
+    payload = {'status': 'pending'}
     response = test_client.get('/v1/request/copy/approval_fake_project', params=payload)
     request_obj = response.json()['result'][0]
 
@@ -293,7 +222,7 @@ def test_deny_partial_files_200(test_client):
         'request_id': request_obj['id'],
         'review_status': 'denied',
         'username': 'admin',
-        'session_id': 'admin-123'
+        'session_id': 'admin-123',
     }
     headers = {
         'Authorization': 'fake',
@@ -306,51 +235,24 @@ def test_deny_partial_files_200(test_client):
     assert response.json()['result']['denied'] == 0
 
 
-def test_partial_approved_200(
-    test_client,
-    httpx_mock,
-    mock_dest,
-    mock_src,
-    mock_user,
-    mock_project,
-    mock_roles
-):
+def test_partial_approved_200(test_client, httpx_mock, mock_dest, mock_src, mock_user, mock_project, mock_roles):
     FILE_DATA_2 = FILE_DATA.copy()
     FILE_DATA_2['id'] = TEST_ID_3
 
-    mock_data = {
-        'result': [FILE_DATA_2]
-    }
+    mock_data = {'result': [FILE_DATA_2]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/search.*$')
-    httpx_mock.add_response(
-        method='GET',
-        url=url,
-        json=mock_data,
-        status_code=200
-    )
+    httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
     # mock trigger pipeline
-    httpx_mock.add_response(
-        method='POST',
-        url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/',
-        json={'result': ''})
+    httpx_mock.add_response(method='POST', url=ConfigClass.DATA_UTILITY_SERVICE + 'files/actions/', json={'result': ''})
 
     # entity_geids file
     mock_data = {'result': [FILE_DATA_2]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/batch.*$')
-    httpx_mock.add_response(
-        method='GET',
-        url=url,
-        json=mock_data,
-        status_code=200
-    )
+    httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
     # mock notification
-    httpx_mock.add_response(
-        method='POST',
-        url=ConfigClass.EMAIL_SERVICE,
-        json={}
-    )
+    httpx_mock.add_response(method='POST', url=ConfigClass.EMAIL_SERVICE + 'email/', json={})
 
     payload = {
         'entity_ids': [FILE_DATA['id'], FILE_DATA_2['id']],
@@ -367,13 +269,11 @@ def test_partial_approved_200(
     request_obj = response.json()['result']
 
     payload = {
-        'entity_ids': [
-            FILE_DATA['id']
-        ],
+        'entity_ids': [FILE_DATA['id']],
         'request_id': request_obj['id'],
         'review_status': 'denied',
         'username': 'admin',
-        'session_id': 'admin-123'
+        'session_id': 'admin-123',
     }
     headers = {
         'Authorization': 'fake',
@@ -386,13 +286,11 @@ def test_partial_approved_200(
     assert response.json()['result']['denied'] == 0
 
     payload = {
-        'entity_ids': [
-            FILE_DATA_2['id']
-        ],
+        'entity_ids': [FILE_DATA_2['id']],
         'request_id': request_obj['id'],
         'review_status': 'approved',
         'username': 'admin',
-        'session_id': 'admin-123'
+        'session_id': 'admin-123',
     }
     headers = {
         'Authorization': 'fake',
@@ -405,46 +303,22 @@ def test_partial_approved_200(
     assert response.json()['result']['denied'] == 0
 
 
-def test_complete_pending_400(
-    test_client,
-    httpx_mock,
-    mock_dest,
-    mock_src,
-    mock_user,
-    mock_project,
-    mock_roles
-):
+def test_complete_pending_400(test_client, httpx_mock, mock_dest, mock_src, mock_user, mock_project, mock_roles):
     FILE_DATA_2 = FILE_DATA.copy()
     FILE_DATA_2['id'] = TEST_ID_3
 
     # entity_geids file
     mock_data = {'result': [FILE_DATA_2]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/batch.*$')
-    httpx_mock.add_response(
-        method='GET',
-        url=url,
-        json=mock_data,
-        status_code=200
-    )
+    httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
     # mock notification
-    httpx_mock.add_response(
-        method='POST',
-        url=ConfigClass.EMAIL_SERVICE,
-        json={}
-    )
+    httpx_mock.add_response(method='POST', url=ConfigClass.EMAIL_SERVICE + 'email/', json={})
 
     # mock get file list
-    mock_data = {
-        'result': [FILE_DATA_2]
-    }
+    mock_data = {'result': [FILE_DATA_2]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/search.*$')
-    httpx_mock.add_response(
-        method='GET',
-        url=url,
-        json=mock_data,
-        status_code=200
-    )
+    httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
     payload = {
         'entity_ids': [FILE_DATA_2['id']],
@@ -477,16 +351,9 @@ def test_pending_files_list_200(test_client, httpx_mock):
     # entity_geids file
     mock_data = {'result': [FILE_DATA]}
     url = re.compile('^' + ConfigClass.META_SERVICE + 'items/batch.*$')
-    httpx_mock.add_response(
-        method='GET',
-        url=url,
-        json=mock_data,
-        status_code=200
-    )
+    httpx_mock.add_response(method='GET', url=url, json=mock_data, status_code=200)
 
-    payload = {
-        'status': 'pending'
-    }
+    payload = {'status': 'pending'}
     response = test_client.get('/v1/request/copy/approval_fake_project', params=payload)
     request_obj = response.json()['result'][0]
 

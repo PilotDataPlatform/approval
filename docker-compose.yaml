@@ -19,7 +19,6 @@ services:
       - .:/usr/src/app
     environment:
       - DB_URI=postgresql://postgres:postgres@db:5432
-      - RDS_DB_URI=postgresql://postgres:postgres@db:5432/approval
     depends_on:
       db:
         condition: service_healthy
